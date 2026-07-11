@@ -9,3 +9,26 @@ body {
 .card {
   border-radius: 1.5rem;
 }
+
+.app-shell {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.hero-card {
+  background: linear-gradient(135deg, #eef4ff 0%, #f8fbff 100%);
+}
+
+.hero-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
+.nav-pills .nav-link {
+  color: #4c63d2;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #4c63d2;
+  color: #fff;
+}
