@@ -4,9 +4,10 @@ export function buildApiUrl(path) {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   const apiPath = normalizedPath.startsWith('/api') ? normalizedPath : `/api${normalizedPath}`;
+  const slashSuffixedPath = apiPath.endsWith('/') ? apiPath : `${apiPath}/`;
 
   if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev${apiPath}`;
+    return `https://${codespaceName}-8000.app.github.dev${slashSuffixedPath}`;
   }
 
   if (typeof window !== 'undefined') {
@@ -14,16 +15,16 @@ export function buildApiUrl(path) {
 
     if (hostname.includes('.app.github.dev')) {
       const backendHost = hostname.replace(/-5173(?=\.app\.github\.dev)/, '-8000');
-      return `https://${backendHost}${apiPath}`;
+      return `https://${backendHost}${slashSuffixedPath}`;
     }
 
     if (hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '0.0.0.0') {
-      return `${window.location.protocol}//${hostname}:8000${apiPath}`;
+      return `${window.location.protocol}//${hostname}:8000${slashSuffixedPath}`;
     }
   }
 
   // Safe fallback for local development so we never build https://undefined-8000...
-  return `http://127.0.0.1:8000${apiPath}`;
+  return `http://127.0.0.1:8000${slashSuffixedPath}`;
 }
 
 export function extractCollection(payload, fallbackKey) {

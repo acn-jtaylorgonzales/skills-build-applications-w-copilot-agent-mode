@@ -26,7 +26,7 @@ app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', baseUrl });
 });
 
-app.get('/api/users', async (_req: Request, res: Response) => {
+app.get(['/api/users', '/api/users/'], async (_req: Request, res: Response) => {
   try {
     const users = await UserModel.find().lean();
     res.json({ message: 'Users route', endpoint: '/api/users', baseUrl, users });
@@ -35,7 +35,7 @@ app.get('/api/users', async (_req: Request, res: Response) => {
   }
 });
 
-app.post('/api/users', async (req: Request, res: Response) => {
+app.post(['/api/users', '/api/users/'], async (req: Request, res: Response) => {
   try {
     const user = await UserModel.create(req.body);
     res.status(201).json({ message: 'User created', data: user, baseUrl });
@@ -44,7 +44,7 @@ app.post('/api/users', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/teams', async (_req: Request, res: Response) => {
+app.get(['/api/teams', '/api/teams/'], async (_req: Request, res: Response) => {
   try {
     const teams = await TeamModel.find().populate('captain').populate('members').lean();
     res.json({ message: 'Teams route', endpoint: '/api/teams', baseUrl, teams });
@@ -53,7 +53,7 @@ app.get('/api/teams', async (_req: Request, res: Response) => {
   }
 });
 
-app.post('/api/teams', async (req: Request, res: Response) => {
+app.post(['/api/teams', '/api/teams/'], async (req: Request, res: Response) => {
   try {
     const team = await TeamModel.create(req.body);
     res.status(201).json({ message: 'Team created', data: team, baseUrl });
@@ -62,7 +62,7 @@ app.post('/api/teams', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/activities', async (_req: Request, res: Response) => {
+app.get(['/api/activities', '/api/activities/'], async (_req: Request, res: Response) => {
   try {
     const activities = await ActivityModel.find().populate('user').lean();
     res.json({ message: 'Activities route', endpoint: '/api/activities', baseUrl, activities });
@@ -71,7 +71,7 @@ app.get('/api/activities', async (_req: Request, res: Response) => {
   }
 });
 
-app.post('/api/activities', async (req: Request, res: Response) => {
+app.post(['/api/activities', '/api/activities/'], async (req: Request, res: Response) => {
   try {
     const activity = await ActivityModel.create(req.body);
     res.status(201).json({ message: 'Activity logged', data: activity, baseUrl });
@@ -80,7 +80,7 @@ app.post('/api/activities', async (req: Request, res: Response) => {
   }
 });
 
-app.get('/api/leaderboard', async (_req: Request, res: Response) => {
+app.get(['/api/leaderboard', '/api/leaderboard/'], async (_req: Request, res: Response) => {
   try {
     const leaderboard = await LeaderboardModel.find().populate('user').lean();
     res.json({ message: 'Leaderboard route', endpoint: '/api/leaderboard', baseUrl, leaderboard });
@@ -89,7 +89,7 @@ app.get('/api/leaderboard', async (_req: Request, res: Response) => {
   }
 });
 
-app.get('/api/workouts', async (_req: Request, res: Response) => {
+app.get(['/api/workouts', '/api/workouts/'], async (_req: Request, res: Response) => {
   try {
     const workouts = await WorkoutModel.find().lean();
     res.json({ message: 'Workouts route', endpoint: '/api/workouts', baseUrl, workouts });
@@ -98,7 +98,7 @@ app.get('/api/workouts', async (_req: Request, res: Response) => {
   }
 });
 
-app.post('/api/workouts', async (req: Request, res: Response) => {
+app.post(['/api/workouts', '/api/workouts/'], async (req: Request, res: Response) => {
   try {
     const workout = await WorkoutModel.create(req.body);
     res.status(201).json({ message: 'Workout suggestion created', data: workout, baseUrl });
