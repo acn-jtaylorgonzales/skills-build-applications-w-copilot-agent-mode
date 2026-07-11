@@ -1,3 +1,21 @@
+export function resolveBackendOrigin(hostname, codespaceName) {
+  const trimmedCodespace = codespaceName?.trim();
+
+  if (trimmedCodespace) {
+    return `https://${trimmedCodespace}-8000.app.github.dev`;
+  }
+
+  if (hostname?.includes('.app.github.dev')) {
+    return `https://${hostname.replace(/-(\d+)(?=\.app\.github\.dev)/, '-8000')}`;
+  }
+
+  if (hostname && hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '0.0.0.0') {
+    return `http://${hostname}:8000`;
+  }
+
+  return 'http://127.0.0.1:8000';
+}
+
 export function buildApiUrl(path) {
   // Vite uses import.meta.env for browser-side environment variables.
   // Define VITE_CODESPACE_NAME in .env.local when running in GitHub Codespaces.
@@ -6,25 +24,12 @@ export function buildApiUrl(path) {
   const apiPath = normalizedPath.startsWith('/api') ? normalizedPath : `/api${normalizedPath}`;
   const slashSuffixedPath = apiPath.endsWith('/') ? apiPath : `${apiPath}/`;
 
-  if (codespaceName) {
-    return `https://${codespaceName}-8000.app.github.dev${slashSuffixedPath}`;
-  }
-
   if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-
-    if (hostname.includes('.app.github.dev')) {
-      const backendHost = hostname.replace(/-5173(?=\.app\.github\.dev)/, '-8000');
-      return `https://${backendHost}${slashSuffixedPath}`;
-    }
-
-    if (hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '0.0.0.0') {
-      return `${window.location.protocol}//${hostname}:8000${slashSuffixedPath}`;
-    }
+    const origin = resolveBackendOrigin(window.location.hostname, codespaceName);
+    return `${origin}${slashSuffixedPath}`;
   }
 
-  // Safe fallback for local development so we never build https://undefined-8000...
-  return `http://127.0.0.1:8000${slashSuffixedPath}`;
+  return `${resolveBackendOrigin('', codespaceName)}${slashSuffixedPath}`;
 }
 
 export function extractCollection(payload, fallbackKey) {
