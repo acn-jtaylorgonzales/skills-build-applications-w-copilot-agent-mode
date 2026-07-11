@@ -9,7 +9,8 @@ function Teams() {
   useEffect(() => {
     async function loadTeams() {
       try {
-        const response = await fetch(buildApiUrl('teams'));
+        const codespaceApiUrl = `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`;
+        const response = await fetch(import.meta.env.VITE_CODESPACE_NAME ? codespaceApiUrl : buildApiUrl('teams'));
         if (!response.ok) {
           throw new Error('Failed to fetch teams');
         }

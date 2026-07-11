@@ -9,7 +9,8 @@ function Workouts() {
   useEffect(() => {
     async function loadWorkouts() {
       try {
-        const response = await fetch(buildApiUrl('workouts'));
+        const codespaceApiUrl = `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`;
+        const response = await fetch(import.meta.env.VITE_CODESPACE_NAME ? codespaceApiUrl : buildApiUrl('workouts'));
         if (!response.ok) {
           throw new Error('Failed to fetch workouts');
         }

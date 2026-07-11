@@ -9,7 +9,8 @@ function Leaderboard() {
   useEffect(() => {
     async function loadLeaderboard() {
       try {
-        const response = await fetch(buildApiUrl('leaderboard'));
+        const codespaceApiUrl = `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`;
+        const response = await fetch(import.meta.env.VITE_CODESPACE_NAME ? codespaceApiUrl : buildApiUrl('leaderboard'));
         if (!response.ok) {
           throw new Error('Failed to fetch leaderboard');
         }

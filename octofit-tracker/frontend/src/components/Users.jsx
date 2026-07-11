@@ -9,7 +9,8 @@ function Users() {
   useEffect(() => {
     async function loadUsers() {
       try {
-        const response = await fetch(buildApiUrl('users'));
+        const codespaceApiUrl = `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`;
+        const response = await fetch(import.meta.env.VITE_CODESPACE_NAME ? codespaceApiUrl : buildApiUrl('users'));
         if (!response.ok) {
           throw new Error('Failed to fetch users');
         }
