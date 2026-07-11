@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { buildApiUrl } from '../utils/api';
+import { buildApiUrl, extractCollection } from '../utils/api';
 
 function Activities() {
   const [activities, setActivities] = useState([]);
@@ -10,9 +10,11 @@ function Activities() {
     async function loadActivities() {
       try {
         const response = await fetch(buildApiUrl('activities'));
+        if (!response.ok) {
+          throw new Error('Failed to fetch activities');
+        }
         const payload = await response.json();
-        const items = Array.isArray(payload) ? payload : payload.results || payload.activities || [];
-        setActivities(items);
+        setActivities(extractCollection(payload, 'activities'));
       } catch (err) {
         setError(err.message || 'Failed to load activities');
       } finally {

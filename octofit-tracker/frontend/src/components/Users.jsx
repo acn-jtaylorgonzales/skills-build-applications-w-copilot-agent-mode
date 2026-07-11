@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { buildApiUrl } from '../utils/api';
+import { buildApiUrl, extractCollection } from '../utils/api';
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -10,9 +10,11 @@ function Users() {
     async function loadUsers() {
       try {
         const response = await fetch(buildApiUrl('users'));
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
         const payload = await response.json();
-        const items = Array.isArray(payload) ? payload : payload.results || payload.users || [];
-        setUsers(items);
+        setUsers(extractCollection(payload, 'users'));
       } catch (err) {
         setError(err.message || 'Failed to load users');
       } finally {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { buildApiUrl } from '../utils/api';
+import { buildApiUrl, extractCollection } from '../utils/api';
 
 function Workouts() {
   const [workouts, setWorkouts] = useState([]);
@@ -10,9 +10,11 @@ function Workouts() {
     async function loadWorkouts() {
       try {
         const response = await fetch(buildApiUrl('workouts'));
+        if (!response.ok) {
+          throw new Error('Failed to fetch workouts');
+        }
         const payload = await response.json();
-        const items = Array.isArray(payload) ? payload : payload.results || payload.workouts || [];
-        setWorkouts(items);
+        setWorkouts(extractCollection(payload, 'workouts'));
       } catch (err) {
         setError(err.message || 'Failed to load workouts');
       } finally {

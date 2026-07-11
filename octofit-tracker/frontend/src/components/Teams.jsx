@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { buildApiUrl } from '../utils/api';
+import { buildApiUrl, extractCollection } from '../utils/api';
 
 function Teams() {
   const [teams, setTeams] = useState([]);
@@ -10,9 +10,11 @@ function Teams() {
     async function loadTeams() {
       try {
         const response = await fetch(buildApiUrl('teams'));
+        if (!response.ok) {
+          throw new Error('Failed to fetch teams');
+        }
         const payload = await response.json();
-        const items = Array.isArray(payload) ? payload : payload.results || payload.teams || [];
-        setTeams(items);
+        setTeams(extractCollection(payload, 'teams'));
       } catch (err) {
         setError(err.message || 'Failed to load teams');
       } finally {

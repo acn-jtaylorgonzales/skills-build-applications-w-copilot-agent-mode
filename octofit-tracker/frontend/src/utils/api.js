@@ -9,6 +9,45 @@ export function buildApiUrl(path) {
     return `https://${codespaceName}-8000.app.github.dev${apiPath}`;
   }
 
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+
+    if (hostname.includes('.app.github.dev')) {
+      const backendHost = hostname.replace(/-5173(?=\.app\.github\.dev)/, '-8000');
+      return `https://${backendHost}${apiPath}`;
+    }
+
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1' && hostname !== '0.0.0.0') {
+      return `${window.location.protocol}//${hostname}:8000${apiPath}`;
+    }
+  }
+
   // Safe fallback for local development so we never build https://undefined-8000...
   return `http://127.0.0.1:8000${apiPath}`;
+}
+
+export function extractCollection(payload, fallbackKey) {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  if (payload && typeof payload === 'object') {
+    if (Array.isArray(payload.results)) {
+      return payload.results;
+    }
+
+    if (Array.isArray(payload.items)) {
+      return payload.items;
+    }
+
+    if (Array.isArray(payload[fallbackKey])) {
+      return payload[fallbackKey];
+    }
+
+    if (Array.isArray(payload.data)) {
+      return payload.data;
+    }
+  }
+
+  return [];
 }
