@@ -1,0 +1,1 @@
+{"name":"octofit-backend","version":"1.0.0","main":"dist/server.js","scripts":{"build":"tsc","start":"node dist/server.js","dev":"ts-node src/server.ts"},"dependencies":{"express":"^4.19.0","mongoose":"^8.0.0"},"devDependencies":{"@types/express":"^5.0.0","@types/node":"^22.0.0","ts-node":"^10.9.0","typescript":"^5.7.0"}}
