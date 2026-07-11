@@ -8,10 +8,13 @@ require("./config/database");
 const models_1 = require("./models");
 const app = (0, express_1.default)();
 const port = Number(process.env.PORT || 8000);
-const codespaceName = process.env.CODESPACE_NAME;
-const baseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev`
-    : `http://localhost:${port}`;
+const buildBaseUrl = () => {
+    const codespaceName = process.env.CODESPACE_NAME?.trim();
+    return codespaceName
+        ? `https://${codespaceName}-8000.app.github.dev`
+        : `http://localhost:${port}`;
+};
+const baseUrl = buildBaseUrl();
 app.use(express_1.default.json());
 app.get('/health', (_req, res) => {
     res.json({ status: 'ok', baseUrl });
